@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+
+<body>
+    <!-- Display -->
+    <div id="display" class="display">
+        <div class="cross"></div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var socket = io();
+        let dispay = document.getElementById('display');
+        let maxDistance = 300;
+
+        socket.on('sonar', function (msg) {
+            console.log(msg);
+            let elm = document.createElement('div');
+            let dot = document.createElement('span');
+            if (msg.cm > maxDistance) maxDistance = msg.cm;
+            dot.style.top = (50 - (50 / maxDistance * msg.cm)) + '%';
+            elm.appendChild(dot);
+            elm.classList = "dot fade-out";
+            elm.style = `transform: rotate(${msg.position - 90}deg);`;
+            display.append(elm);
+            setTimeout(() => { elm.remove(); }, 10000);
+        });
+    </script>
+</body>
+
+</html>
